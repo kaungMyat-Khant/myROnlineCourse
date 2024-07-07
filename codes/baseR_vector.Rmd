@@ -1,0 +1,204 @@
+---
+title: "Basis of R: Vectors"
+author: "Kaung Myat Khant"
+date: "`r Sys.Date()`"
+output: powerpoint_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r clean_env, include=FALSE}
+rm(list = ls())
+```
+
+
+## R is a kind of object-oriented programming
+
+- Everything is an object in R
+- To create an object, we assign a value to a variable
+- Use **<-** to assign the value. Shortcut is **Alt+-**
+- To see the object, just mention its name
+
+```{r assignment, include=TRUE}
+x <- 15 ; x
+a <- "space" ; a
+```
+
+## Vectors
+
+- More than one values can be assigned to an object by concatenate **c()**
+```{r concatenate, include=TRUE}
+concat <- c(15,20,25,30) ; concat
+```
+- And we get a **numeric vector** of length **4**
+- A vector is a fundamental data structure storing same type of elements
+
+## Common types of vectors
+- Numeric
+- Logical
+- Character
+- Factor
+
+## Common types of vectors
+
+```{r vector, include=TRUE}
+numeric <- c(1,2,3,4) ; numeric
+logical <- c(TRUE, FALSE, FALSE, TRUE); logical
+character <- c("a","b","c","d"); character
+```
+
+## Common types of vector  
+We usually prefer factors to character strings.
+```{r factor, include=TRUE}
+factor <- factor(rep(c(0,1),2),levels = c(0,1), labels = c("D-","D+"), ordered =T); factor
+```
+
+## We can see the type of vector by using **str()** 
+```{r str, include=TRUE}
+str(numeric); str(logical); str(character)
+str(factor)
+```
+
+## Creating vectors  
+- We can create vectors by using the following methods:  
+  1. Concatenating **c()**
+  2. Sequencing **":"**, **seq()**
+  3. repeating **rep()**
+
+## Creating vectors
+*Concatenating* coerce the vector elements into single data type
+```{r concat, include=TRUE}
+concat <- c("a","b","c",1:3, TRUE) ;  str(concat)
+```
+
+## Creating vectors  
+*Sequencing* can be use to create numeric vector
+```{r seq, include=TRUE}
+simple_seq <- 1:10; simple_seq
+complex_seq_increment <- seq(from = 0.5, to = 5, by = 0.5) ; complex_seq_increment
+```
+
+## Creating vectors
+*Repeating* can be use for both character and numeric data
+```{r rep, include=TRUE}
+rep_cha <- rep(c("a","b"), times=5) ; rep_cha
+rep_num <- rep(1:2, each=5) ; rep_num
+```
+
+## Converting vector types
+- We can convert vectors from one data type to another.
+  1. character using **as.character()**
+  2. numeric using **as.numeric()**
+  3. logical using **as.logical()**
+  4. factor using **as.factor()**
+- We should note that **coercion** occurs when we convert from one data type to another.
+
+## Coercion
+- *logical* data can be coerced into *numeric*, *character* or *factor*
+```{r logi_coerce, include=TRUE}
+as.numeric(logical)
+as.character(logical)
+as.factor(logical)
+```
+
+## Coercion
+- When *numerical* data is coerced into *logical*, 
+  - **zero** is converted to **FALSE** 
+  - other numbers are converted to **TRUE**
+```{r num_coerce, include=TRUE}
+as.logical(numeric)
+as.logical(c(-1,-2, 0, 1,1.5))
+```
+
+## Coercion
+- When *character* data is coerced into *logical*, 
+  - **"TRUE/T"** is converted to **TRUE** regardless of the case of the letter
+  - same for **"FALSE/F"**
+  - other values are coerced into **NA** (missing value)
+```{r cha_coerce, include=TRUE}
+as.logical(c("TRUE","true","FALSE","false","t","T","f","F"))
+```
+
+## Coercion
+- A *numeric* vector can be converted into *character*
+```{r num_char, include=TRUE}
+as.character(1:10)
+```
+
+## Coercion
+- Only *character* vector with *numeric elements* can be converted into *numeric*
+- Other values are coerced into *NA*
+```{r char_num, include=TRUE}
+as.numeric(c("0.5","1","-1.5","a","TRUE","1/2","(3-1)"))
+```
+
+## Coercion Power
+- **Character** > **Numeric** > **Logical** 
+- **NA** is a logical data by default
+```{r coercion, include=TRUE}
+c("a",1,TRUE,NA)
+c(1,TRUE,NA)
+c(TRUE,NA)
+```
+
+## Hierchy of R's Objects
+### Vector object
+  - **Atomic vectors**
+    - *logical*
+    - *numeric*
+      - integer
+      - double
+    - *character*
+  - **List** 
+  
+### NULL object
+
+## Why coercion is important?
+- Let's see the numeric atomic vectors
+  - double (default)
+  - integer
+- Doubles are approximations
+- Integers are exacts
+- We can get the atomic type by using **typeof()**
+
+## Why coercion is important?
+There can be approximation errors in some operations
+```{r coercion_error, include=TRUE}
+sqrt(2)^2 ; typeof(sqrt(2)^2)
+sqrt(2)^2 - 2 
+sqrt(2)^2 == 2
+```
+
+---  
+```{r coerc_err, include=TRUE}
+dplyr::near(sqrt(2)^2,2)
+typeof(2)
+typeof(2L)
+2 == 2L
+```
+
+## Why coercion is important?
+- Special values
+  - Integers have one special value: **NA**
+  - Doubles have four special values: 
+    - **NA**
+    - **-Inf**
+    - **NaN** 
+    - **Inf**
+
+## Special values
+```{r special_value, include=TRUE}
+NA+5; mean(rep(c(1,NA), each = 100),na.rm = F)
+c(-1,0,1)/0
+-Inf + Inf
+```
+
+## NA types
+```{r na, include=TRUE}
+typeof(NA)
+typeof(NA_integer_)
+typeof(NA_real_)
+typeof(NA_character_)
+```
+
